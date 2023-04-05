@@ -3,6 +3,7 @@ FROM node:14
 
 # 作業ディレクトリを指定する
 WORKDIR /app
+COPY package*.json ./
 
 # 必要なライブラリをインストールする
 RUN apt-get update && apt-get install -y \
@@ -17,7 +18,10 @@ RUN apt-get update && apt-get install -y \
     libxtst6 \
     xauth \
     unzip \
+    libgbm1\
     && rm -rf /var/lib/apt/lists/*
+RUN npm install
 
-# Playwrightをインストールする
-RUN npm install -g playwright
+COPY . .
+
+CMD [ "node", "node --experimental-vm-modules pra.mjs" ]
